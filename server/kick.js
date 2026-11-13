@@ -13,9 +13,9 @@ export const isAllowedHost = (h) =>
 const get = async (url, json) => {
   const u = new URL(url);
   if (u.protocol !== 'https:' || !isAllowedHost(u.hostname)) throw err('UNAVAILABLE');
-  const r = await fetch(u, { headers: { 'User-Agent': UA, Accept: json ? 'application/json' : '*/*' }, redirect: 'error', signal: AbortSignal.timeout(15000) }).catch(() => { throw err('UPSTREAM'); });
+  const r = await fetch(u, { headers: { 'User-Agent': UA, Accept: json ? 'application/json' : '*/*' }, redirect: 'error', signal: AbortSignal.timeout(15000) }).catch((e) => { console.error('[kick] fetch falhou', u.hostname, e.cause?.code || e.message); throw err('UPSTREAM'); });
   if (r.status === 404) throw err('NOT_FOUND');
-  if (!r.ok) throw err('UPSTREAM');
+  if (!r.ok) { console.error('[kick] HTTP', r.status, u.hostname, u.pathname); throw err('UPSTREAM'); }
   return json ? r.json().catch(() => { throw err('UPSTREAM'); }) : r.text();
 };
 
