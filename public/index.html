@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clipr — clipes da Kick</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <b class="logo">clipr<span>.</span></b>
+  <nav><a href="/">Início</a><button id="helpBtn" class="ghost icon" aria-label="Ajuda">?</button></nav>
+</header>
+<aside id="help" class="card" hidden>
+  <p><b>Como funciona:</b> cole o link de um VOD da Kick, escolha início e fim e gere o clipe.</p>
+  <p>Use apenas conteúdo que você tem autorização para baixar. Conteúdo privado ou restrito não é suportado.</p>
+</aside>
+<main>
+  <section id="hero">
+    <h1>Crie seu clipe.</h1>
+    <p class="sub">Transforme qualquer trecho da sua live em um clipe de alta qualidade.</p>
+    <form id="loadForm" class="card urlbox">
+      <label for="url">Cole o link da sua live ou VOD da Kick</label>
+      <div class="row">
+        <input id="url" type="url" placeholder="https://kick.com/canal/videos/…" autocomplete="off" required>
+        <button class="primary" id="loadBtn">Carregar vídeo</button>
+      </div>
+    </form>
+    <p id="err" class="err" role="alert" hidden></p>
+  </section>
+
+  <section id="editor" hidden>
+    <div class="meta"><img id="thumb" alt=""><div><h2 id="vTitle"></h2><p id="vMeta" class="muted"></p></div></div>
+    <div class="card">
+      <video id="video" controls playsinline></video>
+      <div class="timeline">
+        <div class="times"><span id="cur">00:00:00</span><span id="tot">00:00:00</span></div>
+        <div id="track"><div id="range"></div><div id="play"></div>
+          <div class="handle" id="hS" tabindex="0" aria-label="Início"></div>
+          <div class="handle" id="hE" tabindex="0" aria-label="Fim"></div></div>
+      </div>
+      <div class="tools">
+        <button data-d="-5">−5s</button><button data-d="-1">−1s</button>
+        <button data-d="1">+1s</button><button data-d="5">+5s</button>
+        <button id="setS" class="accent">Início = agora</button><button id="setE" class="accent">Fim = agora</button>
+      </div>
+      <div class="fields">
+        <label>Início <input id="inS" value="00:00:00" inputmode="numeric"></label>
+        <label>Fim <input id="inE" value="00:00:30" inputmode="numeric"></label>
+      </div>
+      <p id="rangeErr" class="err" hidden></p>
+    </div>
+    <div class="card summary">
+      <h3>Seu clipe</h3>
+      <p>Duração: <b id="dur">00:00:00</b></p>
+      <p class="muted" id="src"></p>
+      <label class="check"><input type="checkbox" id="precise"> Corte preciso (reencoda o vídeo em alta qualidade)</label>
+      <p class="muted small">Desligado: corte direto, sem perda de qualidade; o início pode se ajustar ao keyframe mais próximo. Ligado: corte exato ao quadro, com recompressão de vídeo em alta qualidade (CRF 14); o áudio é mantido.</p>
+      <button class="primary big" id="gen">Gerar clipe</button>
+      <p id="busy" class="muted" hidden><span class="spin"></span> Preparando seu clipe…</p>
+    </div>
+    <div class="card result" id="result" hidden>
+      <h3>Seu clipe está pronto.</h3>
+      <video id="pv" controls playsinline></video>
+      <p id="rInfo" class="muted"></p>
+      <a id="dl" class="primary big" download>Baixar clipe</a>
+    </div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
